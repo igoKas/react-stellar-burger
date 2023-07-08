@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  align-self: flex-start;
+}
+
+.image {
+  width: 480px;
+}
+
+.nutrientsList {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  text-align: center;
+  padding: 32px 0 60px 0;
+  margin: 0;
+}
+
+.nutrientsItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
