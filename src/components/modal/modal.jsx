@@ -8,17 +8,19 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 function Modal({ toggleModal, modalRoot, children }) {
 
 	
-	function handleEscClose(evt) {
-		if (evt.key === 'Escape') toggleModal()
-	}
+	
 
 	React.useEffect(() => {
+		function handleEscClose(evt) {
+			if (evt.key === 'Escape') toggleModal()
+		}
+
 		document.addEventListener('keydown', handleEscClose)
 
     return () => {
       document.removeEventListener('keydown', handleEscClose)
     }
-	})
+	}, []);
 
 
 	return ReactDOM.createPortal(
@@ -33,7 +35,7 @@ function Modal({ toggleModal, modalRoot, children }) {
 		),
 		modalRoot
 	);
-}
+};
 
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,

@@ -38,7 +38,12 @@ function App() {
     const getData = () => {
       setIngredients(prevIngredients => ({ ...prevIngredients, isLoading: true }));
       fetch(url)
-        .then(res => res.json())
+        .then(res => {
+          if (res.ok) {
+              return res.json();
+          }
+          return Promise.reject(`Ошибка ${res.status}`);
+        })
         .then(data => setIngredients(prevIngredients => ({ ...prevIngredients, data: data.data, hasError: false, isLoading: false })))
         .catch(e => {
           setIngredients(prevIngredients => ({ ...prevIngredients, hasError: true, isLoading: false, error: e }));
@@ -57,9 +62,9 @@ function App() {
         </main>
       ) : ingredients.hasError && console.log(ingredients.error)}
 
-      <div id='modal'></div>
+      
       {modalState && (
-        <Modal toggleModal={toggleModal} modalRoot={document.getElementById('modal')}>
+        <Modal toggleModal={toggleModal} modalRoot={document.getElementById('modals')}>
           {currentModal === 'ingredient' ?
             <IngredientDetails ingredient={modalIngredient} /> :
             <OrderDetails />

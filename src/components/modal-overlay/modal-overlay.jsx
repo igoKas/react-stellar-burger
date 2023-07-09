@@ -7,7 +7,7 @@ function ModalOverlay ({ toggleModal }) {
 	}
 
 	return (
-		<div className={styles.modalOverlay} onClick={evt => handleClickClose(evt)}></div>
+		<div className={styles.modalOverlay} onClick={handleClickClose}></div>
 	)
 }
 
