@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 import styles from './modal.module.css'
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+const  modalRoot = document.getElementById('modals');
 
-function Modal({ toggleModal, modalRoot, children }) {
-
-	
-	
+function Modal({ toggleModal, children }) {
 
 	React.useEffect(() => {
 		function handleEscClose(evt) {

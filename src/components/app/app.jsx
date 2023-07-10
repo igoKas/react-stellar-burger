@@ -64,7 +64,7 @@ function App() {
 
       
       {modalState && (
-        <Modal toggleModal={toggleModal} modalRoot={document.getElementById('modals')}>
+        <Modal toggleModal={toggleModal}>
           {currentModal === 'ingredient' ?
             <IngredientDetails ingredient={modalIngredient} /> :
             <OrderDetails />
