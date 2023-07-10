@@ -1,0 +1,35 @@
+.card {
+	position: relative;
+	max-width: 272px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+
+.card:hover {
+	cursor: pointer;
+}
+
+.card__amount {
+	position: absolute;
+	width: 32px;
+	height: 32px;
+	top: 0;
+	right: 0;
+	border-radius: 100%;
+	background-color: #4C4CFF;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.card__price {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.card__name {
+	text-align: center;
+}
