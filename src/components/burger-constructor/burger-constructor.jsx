@@ -17,7 +17,7 @@ function BurgerConstructor({ toggleModal }) {
   }, [constructorState])
 
 	return (
-    <section className="pt-25 pb-8">
+    <section className={`${styles.constructorSectionContainer} pt-25 pb-8`}>
       <ul className={styles.constructorContainer}>
         <li className={styles.lockItem}>
           {bun &&
@@ -32,7 +32,7 @@ function BurgerConstructor({ toggleModal }) {
         <li>
           <ul className={`${styles.constructorScrollContainer} custom-scroll`}>
             {ingredients.map(ingredient =>
-							<li key={ingredient._id} className={styles.scrollItem}>
+							<li key={ingredient.uuid} className={styles.scrollItem}>
                 <DragIcon type="primary" />
                 <ConstructorElement
                   text={ingredient.name}

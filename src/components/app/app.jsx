@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 } from 'uuid';
 import styles from "./app.module.css";
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
@@ -7,83 +8,44 @@ import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/Ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import { BurgerContext } from "../../utils/burgerContext";
+import { getIngredients, postOrderInfo } from "../../utils/api";
 
 function App() {
-  const getIngredientsEndpoint = 'https://norma.nomoreparties.space/api/ingredients';
-  const postOrderEndpoint = 'https://norma.nomoreparties.space/api/orders';
-
   const [ingredients, setIngredients] = React.useState({
     isLoading: false,
     hasError: false,
     data: []
   });
-  const [modalState, setModalState] = React.useState(false);
-  const [modalIngredient, setModalIngredient] = React.useState({});
-  const [currentModal, setCurrentModal] = React.useState('');
   const [orderInfo, setOrderInfo] = React.useState({
     isLoading: false,
     hasError: false,
     data: ''
   });
+  const [modalState, setModalState] = React.useState(false);
+  const [modalIngredient, setModalIngredient] = React.useState({});
+  const [currentModal, setCurrentModal] = React.useState('');
 
   const toggleModal = () => {
     setModalState(!modalState);
   };
 
-  const openIngredientModal = (ingredient) => {
-    constructorDispatcher({type: 'add', payload: ingredient});
+  const openIngredientModal = ingredient => {
+    constructorDispatcher({type: 'add', payload: {...ingredient, uuid: v4()}});
     setModalIngredient(ingredient);
     toggleModal();
     setCurrentModal('ingredient');
   };
 
   const openOrderModal = () => {
-    postOrderInfo();
+    postOrderInfo(setOrderInfo, {
+      'ingredients': constructorState.ingredients.map(ingregient => ingregient._id)
+    });
     toggleModal();
     setCurrentModal('order');
   };
 
-  const postOrderInfo = () => {
-    setOrderInfo(prevOrderInfo => ({...prevOrderInfo, isLoading: true}));
-    fetch(postOrderEndpoint,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({'ingredients': constructorState.ingredients.map(ingregient => ingregient._id)})
-      })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then(data => setOrderInfo(prevOrderInfo => ({...prevOrderInfo, data: data.order.number.toString(), hasError: false, isLoading: false})))
-      .catch(e => {
-        console.log(e)
-        setOrderInfo(prevOrderInfo => ({...prevOrderInfo, hasError: true, isLoading: false, error: e}))
-      });
-  };
-
-  const getIngredients = () => {
-    setIngredients(prevIngredients => ({ ...prevIngredients, isLoading: true }));
-    fetch(getIngredientsEndpoint)
-      .then(res => {
-        if (res.ok) {
-            return res.json();
-        }
-        return Promise.reject(`Ошибка ${res.status}`);
-      })
-      .then(data => setIngredients(prevIngredients => ({ ...prevIngredients, data: data.data, hasError: false, isLoading: false })))
-      .catch(e => {
-        console.log(e)
-        setIngredients(prevIngredients => ({ ...prevIngredients, hasError: true, isLoading: false, error: e }));
-      });
-  };
-
   React.useEffect(() => {
-    getIngredients();
+    getIngredients(setIngredients);
   }, []);
 
   const initialConstructorState = {ingredients: [], sum: 0};
@@ -101,7 +63,7 @@ function App() {
         }
       case "delete":
         return {
-          ingredients: [...state.ingredients.filter(ingredient => ingredient._id !== action.payload._id)],
+          ingredients: state.ingredients.filter(ingredient => ingredient.uuid !== action.payload.uuid),
           sum: state.sum - action.payload.price
         };
       default:
