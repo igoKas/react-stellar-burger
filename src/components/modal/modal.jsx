@@ -37,7 +37,6 @@ function Modal({ toggleModal, children }) {
 
 Modal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
-  modalRoot: PropTypes.instanceOf(Element).isRequired,
   children: PropTypes.node.isRequired,
 };
 

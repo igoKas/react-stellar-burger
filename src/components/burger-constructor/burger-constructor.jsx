@@ -1,29 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ingredientPropType } from '../../utils/prop-types';
 import styles from "./burger-constructor.module.css";
 import { DragIcon, Button, CurrencyIcon, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import { BurgerContext } from '../../utils/burgerContext';
 
-function BurgerConstructor({ data, toggleModal }) {
-  const [bun, setBun] = React.useState({});
+function BurgerConstructor({ toggleModal }) {
+  const [bun, setBun] = React.useState(null);
   const [ingredients, setIngredients] = React.useState([]);
+  const { constructorState, constructorDispatcher } = React.useContext(BurgerContext);
+
+
 
   React.useEffect(() => {
-    setBun(data.find(ingredient => ingredient.type === 'bun'));
-    setIngredients(data.filter(ingredient => ingredient.type !== 'bun'));
-  }, [data])
+    setBun(constructorState.ingredients.find(ingredient => ingredient.type === 'bun'));
+    setIngredients(constructorState.ingredients.filter(ingredient => ingredient.type !== 'bun'));
+  }, [constructorState])
 
 	return (
     <section className="pt-25 pb-8">
       <ul className={styles.constructorContainer}>
         <li className={styles.lockItem}>
+          {bun &&
           <ConstructorElement
             type="top"
             isLocked={true}
             text={`${bun.name} (верх)`}
             price={bun.price}
             thumbnail={bun.image}
-          />
+          />}
         </li>
         <li>
           <ul className={`${styles.constructorScrollContainer} custom-scroll`}>
@@ -34,27 +38,29 @@ function BurgerConstructor({ data, toggleModal }) {
                   text={ingredient.name}
                   price={ingredient.price}
                   thumbnail={ingredient.image}
+                  handleClose={() => constructorDispatcher({type: 'delete', payload: ingredient})}
                 />
               </li>
 						)}
           </ul>
         </li>
         <li className={styles.lockItem}>
+          {bun &&
           <ConstructorElement
             type="bottom"
             isLocked={true}
             text={`${bun.name} (низ)`}
             price={bun.price}
             thumbnail={bun.image}
-          />
+          />}
         </li>
       </ul>
       <div className={styles.sumButtonContainer}>
         <div className={styles.sumContainer}>
-          <span className="text text_type_main-medium">123</span>
+          <span className="text text_type_main-medium">{constructorState.sum}</span>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="medium" onClick={toggleModal}>
+        <Button disabled={!constructorState.ingredients.length} htmlType="button" type="primary" size="medium" onClick={toggleModal}>
           Оформить заказ
         </Button>
       </div>
@@ -63,7 +69,6 @@ function BurgerConstructor({ data, toggleModal }) {
 }
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired,
   toggleModal: PropTypes.func.isRequired
 };
 
