@@ -28,14 +28,6 @@
 	align-items: flex-start;
 }
 
-.scrollItem {
-	box-sizing: border-box;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	width: 100%;
-}
-
 .lockItem {
 	padding-left: 30px;
 }

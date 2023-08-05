@@ -4,13 +4,17 @@ import PropTypes from 'prop-types';
 import styles from './modal.module.css'
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../../services/modal-slice';
 const  modalRoot = document.getElementById('modals');
 
-function Modal({ toggleModal, children }) {
+function Modal({ children }) {
+	const dispatch = useDispatch()
+
 
 	React.useEffect(() => {
 		function handleEscClose(evt) {
-			if (evt.key === 'Escape') toggleModal()
+			if (evt.key === 'Escape') dispatch(closeModal())
 		}
 
 		document.addEventListener('keydown', handleEscClose)
@@ -18,15 +22,15 @@ function Modal({ toggleModal, children }) {
     return () => {
       document.removeEventListener('keydown', handleEscClose)
     }
-	}, []);
+	}, [dispatch]);
 
 
 	return ReactDOM.createPortal(
 		(
 			<>
-				<ModalOverlay toggleModal={toggleModal} />
+				<ModalOverlay />
 				<div className={styles.modalContainer}>
-					<span className={styles.modalClose}><CloseIcon type="primary" onClick={toggleModal}/></span>
+					<span className={styles.modalClose}><CloseIcon type="primary" onClick={() => dispatch(closeModal())}/></span>
 					{children}
       	</div>
 			</>
@@ -36,7 +40,6 @@ function Modal({ toggleModal, children }) {
 };
 
 Modal.propTypes = {
-  toggleModal: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
 };
 
