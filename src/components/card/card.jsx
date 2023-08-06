@@ -4,14 +4,17 @@ import styles from './card.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { openIngredientModal } from '../../services/modal-slice';
 import { useDrag } from "react-dnd";
+import { useMemo } from 'react';
 
 
 function Card({ ingredient }) {
 	const { bun, ingredients } = useSelector(store => store.burgerConstructor);
-	const selectedIngredients = bun ? 
-	[...ingredients, bun].filter(item => item._id === ingredient._id) :
-	[...ingredients].filter(item => item._id === ingredient._id);
 	const dispatch = useDispatch();
+	const selectedIngredients = useMemo(
+    () => [...ingredients, bun || {}].filter(item => item._id === ingredient._id),
+    [ingredients, bun, ingredient._id]
+  );
+	
 	const [, dragRef] = useDrag({
 		type: 'ingredient',
 		item: ingredient,

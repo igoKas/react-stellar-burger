@@ -6,13 +6,15 @@ import { useDrop } from "react-dnd";
 import { addIngredient } from '../../services/burger-constructor-slice';
 import { v4 } from 'uuid';
 import DraggableItem from "../draggable-items/draggable-items";
+import { useMemo } from "react";
 
 function BurgerConstructor() {
   const { bun, ingredients } = useSelector(store => store.burgerConstructor);
-  const sum = bun ? 
-	[...ingredients, bun, bun].reduce((accumulator, ingredient) => accumulator + ingredient.price, 0) :
-	[...ingredients].reduce((accumulator, ingredient) => accumulator + ingredient.price, 0);
   const dispatch = useDispatch();
+  const sum = useMemo(
+    () => [...ingredients, bun || 0, bun || 0].reduce((accumulator, ingredient) => accumulator + ingredient.price, 0),
+    [ingredients, bun]
+  );
 
   const [{ isOver }, dropRef] = useDrop({
     accept: 'ingredient',
@@ -63,9 +65,11 @@ function BurgerConstructor() {
           <CurrencyIcon type="primary" />
         </div> :
         null}
-        <Button disabled={!bun && !ingredients.length} htmlType="button" type="primary" size="medium" onClick={() => dispatch(openOrderModal())}>
-          Оформить заказ
-        </Button>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <Button disabled={!bun && !ingredients.length} htmlType="submit" type="primary" size="medium" onClick={() => dispatch(openOrderModal())}>
+            Оформить заказ
+          </Button>
+        </form>
       </div>
     </section>
 	);
