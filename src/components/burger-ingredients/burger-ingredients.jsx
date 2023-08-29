@@ -1,60 +1,68 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import { ingredientPropType } from '../../utils/prop-types';
-import styles from "./burger-ingredients.module.css"
-import Card from "../card/card";
+import React, { useEffect, useRef } from "react";
+import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useDispatch, useSelector } from "react-redux";
+import { getIngredients } from "../../utils/api";
+import IngredientsType from "../ingredients-type/ingredients-type";
 
-function BurgerIngredients( {data, toggleModal} ) {
-	const [current, setCurrent] = React.useState('bun');
-	
+function BurgerIngredients() {
+	const [currentTab, setCurrentTab] = React.useState('bun');
+	const selectTab = (type) => {
+		setCurrentTab(type);
+		document.querySelector(`#${type}`).scrollIntoView({ behavior: "smooth" });
+	}
+	const bunRef = useRef(null);
+	const sauceRef = useRef(null);
+	const mainRef = useRef(null);
+	const tabOnScroll = () => {
+		const bunTop = Math.abs(bunRef.current.getBoundingClientRect().top);
+		const sauceTop = Math.abs(sauceRef.current.getBoundingClientRect().top);
+		const mainTop = Math.abs(mainRef.current.getBoundingClientRect().top);
+
+		if (bunTop <= sauceTop && bunTop <= mainTop) {
+      setCurrentTab('bun');
+    } else if (sauceTop < bunTop && sauceTop < mainTop) {
+      setCurrentTab('sauce');
+    } else {
+      setCurrentTab('main');
+    }
+	}
+
+	const dispatch = useDispatch();
+	const { ingredients, isLoading, error } = useSelector(state => state.burgerIngredients);
+	useEffect(() => {
+		dispatch(getIngredients());
+	}, [dispatch]);
+
 	return (
 		<section>
 			<h2 className="text text_type_main-large mt-10 mb-5">Соберите бургер</h2>
 			<div className={styles.tabs}>
-				<Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
+				<Tab value="bun" active={currentTab === 'bun'} onClick={() => selectTab('bun')}>
 					Булки
 				</Tab>
-				<Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
+				<Tab value="sauce" active={currentTab === 'sauce'} onClick={() => selectTab('sauce')}>
 					Соусы
 				</Tab>
-				<Tab value="main" active={current === 'main'} onClick={setCurrent}>
+				<Tab value="main" active={currentTab === 'main'} onClick={() => selectTab('main')}>
 					Начинки
 				</Tab>
-    	</div>
-			<ul className={`${styles.cards__container} custom-scroll mt-10`}>
-				<li>
-					<h3 className="text text_type_main-medium">Булки</h3>
-					<ul className={`${styles.card__container} pt-6 pr-4 pb-10 pl-4`}>
-						{data.map((ingredient)=>
-							ingredient.type === "bun" && <Card key={ingredient._id} data={ingredient} toggleModal={toggleModal} />
-						)}
-					</ul>
-				</li>
-				<li>
-					<h3 className="text text_type_main-medium">Соусы</h3>
-					<ul className={`${styles.card__container} pt-6 pr-4 pb-10 pl-4`}>
-						{data.map((ingredient)=>
-							ingredient.type === "sauce" && <Card key={ingredient._id} data={ingredient} toggleModal={toggleModal} />
-						)}
-					</ul>
-				</li>
-				<li>
-					<h3 className="text text_type_main-medium">Начинки</h3>
-					<ul className={`${styles.card__container} pt-6 pr-4 pb-10 pl-4`}>
-						{data.map((ingredient)=>
-							ingredient.type === "main" && <Card key={ingredient._id} data={ingredient} toggleModal={toggleModal} />
-						)}
-					</ul>
-				</li>
+			</div>
+			<ul onScroll={tabOnScroll} className={`${styles.cards__container} custom-scroll mt-10`}>
+				{error ? (
+					<>О нет, ошибка</>
+				) : isLoading ? (
+					<>Ждем</>
+				) : ingredients.length ? (
+					<>
+						<IngredientsType ref={bunRef} ingredients={ingredients} type={'bun'} header={'Булки'} />
+						<IngredientsType ref={sauceRef} ingredients={ingredients} type={'sauce'} header={'Cоусы'} />
+						<IngredientsType ref={mainRef} ingredients={ingredients} type={'main'} header={'Начинки'} />
+					</>
+				) : null}
 			</ul>
 		</section>
 	);
 }
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired,
-  toggleModal: PropTypes.func.isRequired
-};
 
 export default BurgerIngredients;

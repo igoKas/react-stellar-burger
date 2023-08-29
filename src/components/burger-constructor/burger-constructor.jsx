@@ -1,24 +1,35 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styles from "./burger-constructor.module.css";
-import { DragIcon, Button, CurrencyIcon, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
-import { BurgerContext } from '../../utils/burgerContext';
+import { Button, CurrencyIcon, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useDispatch, useSelector } from 'react-redux';
+import { openOrderModal } from '../../services/modal-slice';
+import { useDrop } from "react-dnd";
+import { addIngredient } from '../../services/burger-constructor-slice';
+import { v4 } from 'uuid';
+import DraggableItem from "../draggable-items/draggable-items";
+import { useMemo } from "react";
 
-function BurgerConstructor({ toggleModal }) {
-  const [bun, setBun] = React.useState(null);
-  const [ingredients, setIngredients] = React.useState([]);
-  const { constructorState, constructorDispatcher } = React.useContext(BurgerContext);
+function BurgerConstructor() {
+  const { bun, ingredients } = useSelector(store => store.burgerConstructor);
+  const dispatch = useDispatch();
+  const sum = useMemo(
+    () => [...ingredients, bun || 0, bun || 0].reduce((accumulator, ingredient) => accumulator + ingredient.price, 0),
+    [ingredients, bun]
+  );
 
-
-
-  React.useEffect(() => {
-    setBun(constructorState.ingredients.find(ingredient => ingredient.type === 'bun'));
-    setIngredients(constructorState.ingredients.filter(ingredient => ingredient.type !== 'bun'));
-  }, [constructorState])
+  const [{ isOver }, dropRef] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+			dispatch(addIngredient({...item, uuid: v4()}));
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver()
+    })
+  })
+  const isOverStyle = isOver ? {outline: '1px solid #4C4CFF'} : null;
 
 	return (
     <section className={`${styles.constructorSectionContainer} pt-25 pb-8`}>
-      <ul className={styles.constructorContainer}>
+      <ul ref={dropRef} className={styles.constructorContainer} style={isOverStyle}>
         <li className={styles.lockItem}>
           {bun &&
           <ConstructorElement
@@ -31,16 +42,8 @@ function BurgerConstructor({ toggleModal }) {
         </li>
         <li>
           <ul className={`${styles.constructorScrollContainer} custom-scroll`}>
-            {ingredients.map(ingredient =>
-							<li key={ingredient.uuid} className={styles.scrollItem}>
-                <DragIcon type="primary" />
-                <ConstructorElement
-                  text={ingredient.name}
-                  price={ingredient.price}
-                  thumbnail={ingredient.image}
-                  handleClose={() => constructorDispatcher({type: 'delete', payload: ingredient})}
-                />
-              </li>
+            {ingredients.map((ingredient, index) =>
+							<DraggableItem key={ingredient.uuid} index={index} ingredient={ingredient}/>
 						)}
           </ul>
         </li>
@@ -56,21 +59,20 @@ function BurgerConstructor({ toggleModal }) {
         </li>
       </ul>
       <div className={styles.sumButtonContainer}>
-        <div className={styles.sumContainer}>
-          <span className="text text_type_main-medium">{constructorState.sum}</span>
+        {sum ?
+          <div className={styles.sumContainer}>
+          <span className="text text_type_main-medium">{sum}</span>
           <CurrencyIcon type="primary" />
-        </div>
-        <Button disabled={!constructorState.ingredients.length} htmlType="button" type="primary" size="medium" onClick={toggleModal}>
-          Оформить заказ
-        </Button>
+        </div> :
+        null}
+        <form onSubmit={(e) => e.preventDefault()}>
+          <Button disabled={!bun && !ingredients.length} htmlType="submit" type="primary" size="medium" onClick={() => dispatch(openOrderModal())}>
+            Оформить заказ
+          </Button>
+        </form>
       </div>
     </section>
 	);
 }
-
-BurgerConstructor.propTypes = {
-  toggleModal: PropTypes.func.isRequired
-};
-
 
 export default BurgerConstructor;

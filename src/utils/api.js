@@ -1,37 +1,47 @@
-import { PATH } from "./constants";
-
-export const postOrderInfo = (setOrderInfo, bodyData) => {
-	setOrderInfo(prevOrderInfo => ({ ...prevOrderInfo, isLoading: true }));
-	fetch(`${PATH}/orders`,
-		{
-			method: 'POST',
+import { PATH } from "../utils/constants";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+async function api(uri, data, method) {
+	let options = {};
+	if (data) {
+		options = {
+			method,
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(bodyData)
-		})
-		.then(res => resOk(res))
-		.then(data => setOrderInfo(prevOrderInfo => ({ ...prevOrderInfo, data: data.order.number.toString(), hasError: false, isLoading: false })))
-		.catch(e => {
-			console.log(e)
-			setOrderInfo(prevOrderInfo => ({ ...prevOrderInfo, hasError: true, isLoading: false, error: e }))
-		});
-};
-
-export const getIngredients = (setIngredients) => {
-	setIngredients(prevIngredients => ({ ...prevIngredients, isLoading: true }));
-	fetch(`${PATH}/ingredients`)
-		.then(res => resOk(res))
-		.then(data => setIngredients(prevIngredients => ({ ...prevIngredients, data: data.data, hasError: false, isLoading: false })))
-		.catch(e => {
-			console.log(e)
-			setIngredients(prevIngredients => ({ ...prevIngredients, hasError: true, isLoading: false, error: e }));
-		});
-};
-
-const resOk = res => {
-	if (res.ok) {
-		return res.json();
+			body: JSON.stringify(data)
+		};
 	}
-	return Promise.reject(`Ошибка ${res.status}`);
+	try {
+		const response = await fetch(PATH + uri, options);
+		if (!response.ok) {
+			throw new Error('Ответ сети был не ok.');
+		}
+		const result = await response.json();
+		return result
+	} catch (error) {
+		console.log('Возникла проблема с вашим fetch запросом: ', error.message);
+	}
 }
+
+export const getIngredients = createAsyncThunk(
+	'ingredient/fetchAll',
+	async (_, thunkAPI) => {
+		try {
+			const data = await api('ingredients');
+			return data.data;
+		} catch (e) {
+			return thunkAPI.rejectWithValue('Не удалось выполнить fetch')
+		}
+	}
+)
+
+export const postOrder = createAsyncThunk(
+	'order/post',
+	async (IDs, thunkAPI) => {
+		try {
+			return api('orders', IDs, 'POST');
+		} catch (e) {
+			return thunkAPI.rejectWithValue('Не удалось выполнить fetch')
+		}
+	}
+)

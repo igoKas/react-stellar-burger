@@ -1,18 +1,12 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import styles from './modal-overlay.module.css'
+import { closeModal } from '../../services/modal-slice';
 
-function ModalOverlay ({ toggleModal }) {
-	function handleClickClose(evt) {
-		if (evt) toggleModal()
-	}
-
+function ModalOverlay () {
+	const dispatch = useDispatch();
 	return (
-		<div className={styles.modalOverlay} onClick={handleClickClose}></div>
+		<div className={styles.modalOverlay} onClick={() => dispatch(closeModal())}></div>
 	)
 }
-
-ModalOverlay.propTypes = {
-  toggleModal: PropTypes.func.isRequired
-};
 
 export default ModalOverlay;
