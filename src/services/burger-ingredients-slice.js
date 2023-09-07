@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getIngredients } from '../utils/api';
+import { getIngredients } from './actions';
 
 const initialState = {
-	isLoading: false,
+	isLoading: true,
 	error: '',
 	ingredients: [],
 }
@@ -13,21 +13,22 @@ export const burgerIngredientsSlice = createSlice({
 	reducers: {
 		
 	},
-	extraReducers: {
-		[getIngredients.fulfilled]: (state, action) => {
-			state.isLoading = false;
-			state.error = '';
-			state.ingredients = action.payload;
-		},
-		[getIngredients.pending]: (state) => {
-			state.isLoading = true;
-		},
-		[getIngredients.rejected]: (state, action) => {
-			state.isLoading = false;
-			state.error = action.error.message;
-		},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getIngredients.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.error = '';
+				state.ingredients = action.payload;
+			})
+			.addCase(getIngredients.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getIngredients.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.error.message;
+			})
 	}
-})
+});
 
 export const {
 	

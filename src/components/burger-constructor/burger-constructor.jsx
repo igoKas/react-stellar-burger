@@ -1,16 +1,19 @@
 import styles from "./burger-constructor.module.css";
 import { Button, CurrencyIcon, ConstructorElement } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from 'react-redux';
-import { openOrderModal } from '../../services/modal-slice';
 import { useDrop } from "react-dnd";
 import { addIngredient } from '../../services/burger-constructor-slice';
 import { v4 } from 'uuid';
 import DraggableItem from "../draggable-items/draggable-items";
 import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function BurgerConstructor() {
   const { bun, ingredients } = useSelector(store => store.burgerConstructor);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const user = useSelector(store => store.user.user)
   const sum = useMemo(
     () => [...ingredients, bun || 0, bun || 0].reduce((accumulator, ingredient) => accumulator + ingredient.price, 0),
     [ingredients, bun]
@@ -65,11 +68,14 @@ function BurgerConstructor() {
           <CurrencyIcon type="primary" />
         </div> :
         null}
-        <form onSubmit={(e) => e.preventDefault()}>
-          <Button disabled={!bun && !ingredients.length} htmlType="submit" type="primary" size="medium" onClick={() => dispatch(openOrderModal())}>
-            Оформить заказ
-          </Button>
-        </form>
+        <Button
+        onClick={() => {user ? navigate('/order-info', { state: { background: location } }) : navigate('/login') }}
+        disabled={!bun && !ingredients.length}
+        htmlType="button"
+        type="primary"
+        size="medium">
+          Оформить заказ
+        </Button>
       </div>
     </section>
 	);

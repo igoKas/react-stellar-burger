@@ -1,11 +1,10 @@
 import { useDispatch } from 'react-redux';
 import styles from './modal-overlay.module.css'
-import { closeModal } from '../../services/modal-slice';
 
-function ModalOverlay () {
+function ModalOverlay ({ onClose }) {
 	const dispatch = useDispatch();
 	return (
-		<div className={styles.modalOverlay} onClick={() => dispatch(closeModal())}></div>
+		<div className={styles.modalOverlay} onClick={() => onClose()}></div>
 	)
 }
 
