@@ -1,0 +1,52 @@
+.main {
+    width: 1240px;
+    margin: 120px auto 0;
+    display: flex;
+    gap: 60px;
+}
+
+.nav_section {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.nav_list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.link {
+    height: 64px;
+	text-decoration: none;
+	color: currentColor;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	transition: opacity .3s linear;
+}
+
+.link_inactive {
+	composes: link;
+	color: #8585AD;
+}
+
+.link:hover {
+	opacity: .6;
+	cursor: pointer;
+}
+
+.button_container {
+    width: 480px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.exit_button {
+    composes: link_inactive;
+    background: none;
+    border: none;
+    padding: 0;
+}

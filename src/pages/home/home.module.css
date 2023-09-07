@@ -1,0 +1,7 @@
+.constructor__container {
+    width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }

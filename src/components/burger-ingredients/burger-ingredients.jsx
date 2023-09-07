@@ -1,12 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDispatch, useSelector } from "react-redux";
-import { getIngredients } from "../../utils/api";
 import IngredientsType from "../ingredients-type/ingredients-type";
 
 function BurgerIngredients() {
-	const [currentTab, setCurrentTab] = React.useState('bun');
+	const [currentTab, setCurrentTab] = useState('bun');
 	const selectTab = (type) => {
 		setCurrentTab(type);
 		document.querySelector(`#${type}`).scrollIntoView({ behavior: "smooth" });
@@ -30,9 +29,6 @@ function BurgerIngredients() {
 
 	const dispatch = useDispatch();
 	const { ingredients, isLoading, error } = useSelector(state => state.burgerIngredients);
-	useEffect(() => {
-		dispatch(getIngredients());
-	}, [dispatch]);
 
 	return (
 		<section>

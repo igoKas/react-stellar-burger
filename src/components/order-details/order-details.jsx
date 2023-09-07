@@ -2,7 +2,8 @@ import styles from './order-details.module.css';
 import done from '../../images/done.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { postOrder } from '../../utils/api';
+import { clearConstructor } from '../../services/burger-constructor-slice';
+import { postOrder } from '../../services/actions';
 
 function OrderDetails() {
 	const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function OrderDetails() {
 	}
 	useEffect(() => {
 		dispatch(postOrder(createIdArray()));
+		dispatch(clearConstructor());
 	}, [dispatch])
 
 	return (

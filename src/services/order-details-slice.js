@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { postOrder } from '../utils/api';
+import { postOrder } from './actions';
 
 const initialState = {
 	isLoading: false,
@@ -13,20 +13,21 @@ export const orderDetailsSlice = createSlice({
 	reducers: {
 		
 	},
-	extraReducers: {
-		[postOrder.fulfilled]: (state, action) => {
-			state.isLoading = false;
-			state.error = '';
-			state.data = action.payload;
-		},
-		[postOrder.pending]: (state) => {
-			state.isLoading = true;
-		},
-		[postOrder.rejected]: (state, action) => {
-			state.isLoading = false;
-			state.error = action.error.message;
-		},
-	}
+	extraReducers: (builder) => {
+		builder
+			.addCase(postOrder.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.error = '';
+				state.data = action.payload;
+			})
+			.addCase(postOrder.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(postOrder.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.error.message;
+			})
+		}
 })
 
 export const {
