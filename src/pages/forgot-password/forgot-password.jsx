@@ -20,10 +20,10 @@ function ForgotPassword() {
 
     return (
         <main className={formStyles.main}>
-            <form onSubmit={e => submitHandler(e)} className={formStyles.form}>
+            <form onSubmit={submitHandler} className={formStyles.form}>
                 <h2 className='text text_type_main-medium'>Восстановление пароля</h2>
                 <EmailInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.email}
                     name={'email'}
                     placeholder={'Укажите e-mail'}

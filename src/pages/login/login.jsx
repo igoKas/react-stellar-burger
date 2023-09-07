@@ -18,16 +18,16 @@ function Login() {
 
     return (
         <main className={formStyles.main}>
-            <form onSubmit={e => handleLogin(e)} className={formStyles.form}>
+            <form onSubmit={handleLogin} className={formStyles.form}>
                 <h2 className='text text_type_main-medium'>Вход</h2>
                 <EmailInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.email}
                     name={'email'}
                     isIcon={false}
                 />
                 <PasswordInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.password}
                     name={'password'}
                 />

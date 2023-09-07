@@ -78,10 +78,11 @@ const resetPassword = data => {
 };
 
 const postOrder = data => {
-	return fetchApi(
+	return fetchApiWithRefresh(
 		`/orders`,
 		data,
-		'POST'
+		'POST',
+		localStorage.getItem("accessToken")
 	)
 };
 

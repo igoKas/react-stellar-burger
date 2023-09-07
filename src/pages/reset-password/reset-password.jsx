@@ -20,17 +20,13 @@ function ResetPassword() {
         })
     }
 
-    useEffect(() => {
-        return localStorage.removeItem('resetPassword');
-    })
-
     return localStorage.getItem("resetPassword") ?
      (
         <main className={formStyles.main}>
-            <form onSubmit={e => submitHandler(e)} className={formStyles.form}>
+            <form onSubmit={submitHandler} className={formStyles.form}>
                 <h2 className='text text_type_main-medium'>Восстановление пароля</h2>
                 <PasswordInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.password}
                     name={'password'}
                     placeholder={'Введите новый пароль'}
@@ -38,7 +34,7 @@ function ResetPassword() {
                 <Input
                     type={'text'}
                     placeholder={'Введите код из письма'}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.token}
                     name={'token'}
                 />
