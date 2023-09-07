@@ -26,6 +26,20 @@ export const checkUserAuth = () => {
     };
 };
 
+export const register = createAsyncThunk(
+    "user/register",
+    async (inputs, thunkAPI) => {
+        try {
+			const res = await api.register(inputs);
+            localStorage.setItem("accessToken", res.accessToken);
+            localStorage.setItem("refreshToken", res.refreshToken);
+            return res.user;
+		} catch (e) {
+			return thunkAPI.rejectWithValue('Не удалось выполнить fetch')
+		}
+    }
+);
+
 export const login = createAsyncThunk(
     "user/login",
     async (inputs, thunkAPI) => {

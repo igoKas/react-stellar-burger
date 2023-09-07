@@ -22,8 +22,8 @@ function Profile() {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        api.patchUser(values).
-        then(res => dispatch(setUser(res.user)));
+        api.patchUser(values)
+        .then(res => dispatch(setUser(res.user)));
     };
 
     const resetHandler = () => {
@@ -58,21 +58,21 @@ function Profile() {
                     В этом разделе вы можете изменить&nbsp;свои персональные данные
                 </p>
             </div>
-            <form onSubmit={e => submitHandler(e)} className={formStyles.form}>
+            <form onSubmit={submitHandler} className={formStyles.form}>
                 <Input
                     type={'text'}
                     placeholder={'Имя'}
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.name}
                     name={'name'}
                     />
                 <EmailInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.email}
                     name={'email'}
                 />
                 <PasswordInput
-                    onChange={e => onChange(e)}
+                    onChange={onChange}
                     value={values.password}
                     name={'password'}
                 />
