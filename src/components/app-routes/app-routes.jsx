@@ -1,7 +1,7 @@
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/Ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Home from "../../pages/home/home";
 import NotFound from "../../pages/404/404";
 import Login from "../../pages/login/login";
@@ -21,6 +21,7 @@ function AppRoutes() {
     return (
         <>
             <Routes location={background || location}>
+                <Route path='/react-stellar-burger/' element={<Navigate to='/' />} />
                 <Route path='/' element={<Home />} />
                 <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
                 <Route path="/register" element={<OnlyUnAuth component={<Register />} />} />
