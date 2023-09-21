@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import IngredientsType from "../ingredients-type/ingredients-type";
 
 function BurgerIngredients() {
@@ -27,7 +27,6 @@ function BurgerIngredients() {
     }
 	}
 
-	const dispatch = useDispatch();
 	const { ingredients, isLoading, error } = useSelector(state => state.burgerIngredients);
 
 	return (

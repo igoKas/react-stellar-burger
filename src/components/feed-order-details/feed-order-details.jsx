@@ -47,7 +47,7 @@ function FeedOrderDetails() {
 
     return (
         <div className={styles.container}>
-            <p className="text text_type_digits-default mb-10">{`#${order?.number}`}</p>
+            <p className={`${styles.number} text text_type_digits-default mb-10`}>{`#${order?.number}`}</p>
             <h2 className="text text_type_main-medium mb-3">{order?.name}</h2>
             <p className="text text_type_main-small mb-15" style={{ color: status.color }}>{status?.text}</p>
             <p className="text text_type_main-medium mb-6">Состав:</p>

@@ -5,11 +5,12 @@ import { useEffect } from 'react';
 import { connect, disconnect } from '../../services/live-orders-profile/actions';
 import { WSSPATH } from '../../utils/constants';
 import { WebsocketStatus } from '../../utils/live-orders';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function History() {
     const { orders, status, connectingError } = useSelector(store => store.liveOrdersProfile);
     const dispatch = useDispatch();
+    const location = useLocation();
     const accessToken = localStorage.getItem("accessToken").split(' ')[1];
     useEffect(() => {
         dispatch(connect(`${WSSPATH}/orders?token=${accessToken}`));
@@ -26,7 +27,7 @@ function History() {
             ) : orders?.length ? (
                 <>
                     {orders.toReversed().map(order => 
-                        <Link key={order._id} to={`/profile/orders/${order.number}`} className={styles.link}>
+                        <Link key={order._id} state={{ background: location }} to={`/profile/orders/${order.number}`} className={styles.link}>
                             <OrderCard order={order} statusVisibility={true} />
                         </Link>
                     )}

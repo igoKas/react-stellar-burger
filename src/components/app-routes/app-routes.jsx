@@ -59,6 +59,26 @@ function AppRoutes() {
                             />
                         }
                     />
+                    <Route
+                        path='/feed/:orderNumber'
+                        element={
+                            <Modal>
+                                <FeedOrderDetails />
+                            </Modal>
+                        }
+                    />
+                    <Route
+                        path='/profile/orders/:orderNumber'
+                        element={
+                            <OnlyAuth
+                                component={
+                                    <Modal>
+                                        <FeedOrderDetails />
+                                    </Modal>
+                                }
+                            />
+                        }
+                    />
                 </Routes>
             )}
         </>

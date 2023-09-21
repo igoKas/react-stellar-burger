@@ -5,12 +5,13 @@ import { useEffect, useMemo } from 'react';
 import { connect, disconnect } from '../../services/live-orders/actions';
 import { WSSPATH } from '../../utils/constants';
 import { WebsocketStatus } from '../../utils/live-orders';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 function Feed() {
     const { orders, status, connectingError } = useSelector(store => store.liveOrders);
     const dispatch = useDispatch();
+    const location = useLocation();
     useEffect(() => {
         dispatch(connect(`${WSSPATH}/orders/all`));
         return () => {
@@ -36,7 +37,7 @@ function Feed() {
             <div className={styles.content_container}>
                 <ul className={`${styles.orders_container} custom-scroll`}>
                     {orders.orders.toReversed().map(order =>
-                        <Link key={order._id} to={`/feed/${order.number}`} className={styles.link}>
+                        <Link key={order._id} state={{ background: location }} to={`/feed/${order.number}`} className={styles.link}>
                             <OrderCard order={order} />
                         </Link>
                     )}

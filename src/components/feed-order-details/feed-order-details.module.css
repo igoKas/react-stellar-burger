@@ -3,6 +3,10 @@
     margin: 120px auto 0;
 }
 
+.number {
+    text-align: center;
+}
+
 .ingredients {
     display: flex;
     flex-direction: column;
@@ -47,4 +51,5 @@
     align-items: center;
     gap: 8px;
     margin-left: auto;
+    padding-bottom: 40px;
 }
