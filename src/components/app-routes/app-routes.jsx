@@ -21,7 +21,6 @@ function AppRoutes() {
     return (
         <>
             <Routes location={background || location}>
-                <Route path='/react-stellar-burger/' element={<Navigate to='/' />} />
                 <Route path='/' element={<Home />} />
                 <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
                 <Route path="/register" element={<OnlyUnAuth component={<Register />} />} />
