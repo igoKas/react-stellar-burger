@@ -1,2 +1,2 @@
-# Каноническая работа проекта Stellar Burger 
-# Этап "Промежуточный проект. CRA-заготовка и структура папок под компоненты"
+# Stellar Burger 
+# Githb pages: https://igokas.github.io/react-stellar-burger/
