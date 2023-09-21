@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    background-color: #1C1C21;
+    border-radius: 40px;
+    transition: opacity .1s linear;
+}
+
+.container:hover {
+    opacity: .8;
+}
+
+.date_number_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name_status_container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.icons_sum_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sum_container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
