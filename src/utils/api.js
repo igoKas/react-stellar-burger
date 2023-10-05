@@ -86,6 +86,14 @@ const postOrder = data => {
 	)
 };
 
+const getOrder = orderNumber => {
+	return fetchApiWithRefresh(
+		`/orders/${orderNumber}`,
+		null,
+		'GET'
+	)
+};
+
 const register = data => {
 	return fetchApi(
 		`/auth/register`,
@@ -131,6 +139,7 @@ const patchUser = data => {
 export const api = {
 	getIngredients,
 	postOrder,
+	getOrder,
 	register,
 	login,
 	logout,

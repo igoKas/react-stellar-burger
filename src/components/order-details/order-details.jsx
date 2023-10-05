@@ -10,7 +10,9 @@ function OrderDetails() {
 	const { ingredients, bun } = useSelector(store => store.burgerConstructor);
 	const { data, isLoading, error } = useSelector(store => store.orderDetails);
 	const createIdArray = () => {
-		return { ingredients: [...ingredients, bun].map(ingredient => ingredient._id) }
+		const idsObject = { ingredients: [...ingredients].map(ingredient => ingredient._id) };
+		bun && idsObject.ingredients.push(bun._id) && idsObject.ingredients.push(bun._id);
+		return idsObject
 	}
 	useEffect(() => {
 		dispatch(postOrder(createIdArray()));
