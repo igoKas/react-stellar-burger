@@ -18,7 +18,7 @@
 .constructorScrollContainer {
 	overflow: overlay;
 	width: 600px;
-	height: calc(100vh - 505px);
+	height: calc(100vh - 499px);
 	padding: 0;
 	list-style: none;
 	display: flex;
