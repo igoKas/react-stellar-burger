@@ -6,6 +6,7 @@ import { connect, disconnect } from '../../services/live-orders-profile/actions'
 import { WSSPATH } from '../../utils/constants';
 import { WebsocketStatus } from '../../utils/live-orders';
 import { Link, useLocation } from 'react-router-dom';
+import Loader from '../../components/loader/loader';
 
 const History: FC = () => {
     const { orders, status, connectingError } = useSelector(store => store.liveOrdersProfile);
@@ -23,7 +24,7 @@ const History: FC = () => {
             {connectingError ? (
                 <>О нет, ошибка</>
             ) : status !== WebsocketStatus.ONLINE ? (
-                <>Ждем</>
+                <Loader />
             ) : orders?.length ? (
                 <>
                     {orders.toReversed().map(order => 

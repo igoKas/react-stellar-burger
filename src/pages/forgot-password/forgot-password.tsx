@@ -28,6 +28,7 @@ const ForgotPassword: FC = () => {
                     value={values.email}
                     name={'email'}
                     placeholder={'Укажите e-mail'}
+                    autoComplete='email'
                     required
                 />
                 <Button htmlType="submit" type="primary" size="medium">

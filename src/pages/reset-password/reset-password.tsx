@@ -30,6 +30,7 @@ const ResetPassword: FC = () => {
                     value={values.password}
                     name={'password'}
                     placeholder={'Введите новый пароль'}
+                    autoComplete='new-password'
                 />
                 <Input
                     type={'text'}
@@ -37,6 +38,7 @@ const ResetPassword: FC = () => {
                     onChange={onChange}
                     value={values.token}
                     name={'token'}
+                    autoComplete='one-time-code'
                 />
                 <Button htmlType="submit" type="primary" size="medium">
                     Сохранить

@@ -1,6 +1,7 @@
 import { ActionCreatorWithPayload, ActionCreatorWithoutPayload, Middleware, MiddlewareAPI } from "@reduxjs/toolkit";
 import { WsOrders } from "../../utils/types";
 import { AppDispatch, RootState } from "../store";
+import { api } from "../../utils/api";
 
 
 
@@ -42,22 +43,26 @@ export const socketMiddleware = (wsActions: WsActions): Middleware => {
           dispatch(onError('Error'));
         };
 
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
           const { data } = event;
           const parsedData = JSON.parse(data);
-          const { success, ...restParsedData } = parsedData;
-
-          dispatch(onMessage(restParsedData));
+          if (parsedData.message === 'Invalid or missing token') {
+            await api.refreshToken({token: localStorage.getItem("refreshToken") || ''});
+            dispatch(wsConnect((event?.target as WebSocket).url));
+          } else {
+            const { success, ...restParsedData } = parsedData;
+            dispatch(onMessage(restParsedData));
+          }
         };
 
         socket.onclose = () => {
           dispatch(onClose());
         };
 
-        if (wsDisconnect.match(action)) {
+        if (wsDisconnect.match(action) && socket) {
           socket.close();
           socket = null;
-        }
+        };
       }
 
       next(action);

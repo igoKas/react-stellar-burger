@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from '../../utils/hooks';
 import { FC, useCallback, useEffect } from 'react';
 import { clearConstructor } from '../../services/burger-constructor-slice';
 import { postOrder } from '../../services/actions';
+import Loader from '../loader/loader';
 
 const OrderDetails: FC = () => {
 	const dispatch = useDispatch();
@@ -17,14 +18,14 @@ const OrderDetails: FC = () => {
 	useEffect(() => {
 		dispatch(postOrder(createIdArray()));
 		dispatch(clearConstructor());
-	}, [dispatch, createIdArray])
+	}, [dispatch])
 
 	return (
 		<div className={`${styles.container} pt-30 pb-30`}>
 			{error ? (
 				<>О нет, ошибка</>
 			) : isLoading ? (
-				<>Ждем</>
+				<Loader />
 			) : data ? (
 				<>
 					<h2 className='text text_type_digits-large'>{data}</h2>

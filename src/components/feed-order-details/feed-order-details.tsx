@@ -6,6 +6,7 @@ import { useSelector } from "../../utils/hooks";
 import { statusConvert } from "../../utils/statusConvert";
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Ingredient, WsOrder } from '../../utils/types';
+import Loader from '../loader/loader';
 
 const FeedOrderDetails: FC = () => {
     const [order, setOrder] = useState<WsOrder>();
@@ -46,7 +47,7 @@ const FeedOrderDetails: FC = () => {
     const status = statusConvert(order?.status || '');
 
 
-    return (
+    return order ? (
         <div className={styles.container}>
             <p className={`${styles.number} text text_type_digits-default mb-10`}>{`#${order?.number}`}</p>
             <h2 className="text text_type_main-medium mb-3">{order?.name}</h2>
@@ -76,7 +77,9 @@ const FeedOrderDetails: FC = () => {
                 </div>
             </div>
         </div>
-    )
+    ) : <div className={styles.loader}>
+            <Loader />
+        </div>
 }
 
 export default FeedOrderDetails;

@@ -74,16 +74,19 @@ const Profile: FC = () => {
                             onChange={onChange}
                             value={values.name}
                             name={'name'}
+                            autoComplete='name'
                         />
                         <EmailInput
                             onChange={onChange}
                             value={values.email}
                             name={'email'}
+                            autoComplete='email'
                         />
                         <PasswordInput
                             onChange={onChange}
                             value={values.password}
                             name={'password'}
+                            autoComplete='current-password'
                         />
                         <div className={styles.button_container}>
                             <Button htmlType="submit" type="primary" size="medium">

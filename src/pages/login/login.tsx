@@ -26,11 +26,13 @@ const Login: FC = () => {
                     value={values.email}
                     name={'email'}
                     isIcon={false}
+                    autoComplete='email'
                 />
                 <PasswordInput
                     onChange={onChange}
                     value={values.password}
                     name={'password'}
+                    autoComplete='current-password'
                 />
                 <Button htmlType="submit" type="primary" size="medium">
                     Войти

@@ -3,6 +3,7 @@ import styles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector } from "../../utils/hooks";
 import IngredientsType from "../ingredients-type/ingredients-type";
+import Loader from "../loader/loader";
 
 const BurgerIngredients: FC = () => {
 	const [currentTab, setCurrentTab] = useState('bun');
@@ -47,7 +48,7 @@ const BurgerIngredients: FC = () => {
 				{error ? (
 					<>О нет, ошибка</>
 				) : isLoading ? (
-					<>Ждем</>
+					<Loader />
 				) : ingredients.length ? (
 					<>
 						<IngredientsType ref={bunRef} ingredients={ingredients} type={'bun'} header={'Булки'} />

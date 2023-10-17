@@ -7,6 +7,7 @@ import { WSSPATH } from '../../utils/constants';
 import { WebsocketStatus } from '../../utils/live-orders';
 import { Link, useLocation } from 'react-router-dom';
 import { WsOrder } from '../../utils/types';
+import Loader from '../../components/loader/loader';
 
 
 const Feed: FC = () => {
@@ -31,7 +32,7 @@ const Feed: FC = () => {
     return connectingError ? (
         <> О нет, ошибка</>
     ) : status !== WebsocketStatus.ONLINE ? (
-        <>Ждем</>
+        <Loader />
     ) : orders?.orders?.length ? (
         <main className={styles.container}>
             <h2 className="text text_type_main-large mt-10 mb-5">Лента заказов</h2>

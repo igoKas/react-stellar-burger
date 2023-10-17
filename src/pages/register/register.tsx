@@ -28,16 +28,19 @@ const Register: FC = () => {
                     onChange={onChange}
                     value={values.name}
                     name={'name'}
+                    autoComplete='name'
                     />
                 <EmailInput
                     onChange={onChange}
                     value={values.email}
                     name={'email'}
+                    autoComplete='one-time-code'
                 />
                 <PasswordInput
                     onChange={onChange}
                     value={values.password}
                     name={'password'}
+                    autoComplete='new-password'
                 />
                 <Button htmlType="submit" type="primary" size="medium">
                     Зарегистрироваться

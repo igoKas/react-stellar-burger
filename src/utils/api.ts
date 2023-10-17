@@ -4,7 +4,7 @@ import { FormFields, PostOrderApi } from "./types";
 type ApiData = FormFields | PostOrderApi;
 
 function checkReponse(res: Response) {
-	return res.ok ? res.json() : Promise.reject(res.status);
+	return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
 async function fetchApi(url: string, method: string, data?: ApiData, authorization?: string) {
@@ -34,15 +34,13 @@ async function fetchApi(url: string, method: string, data?: ApiData, authorizati
   
 async function fetchApiWithRefresh(url: string, method: string, data?: ApiData, authorization?: string) {
 	try {
-		return fetchApi(url, method, data, authorization);
+		return await fetchApi(url, method, data, authorization);
 	} catch (err) {
 		if ((err as Error).message === "jwt expired") {
 		const refreshData = await refreshToken({token: localStorage.getItem("refreshToken") || ''});
 		if (!refreshData.success) {
 			return Promise.reject(refreshData);
 		}
-		localStorage.setItem("refreshToken", refreshData.refreshToken);
-		localStorage.setItem("accessToken", refreshData.accessToken);
 		return fetchApi(url, method, data, refreshData.accessToken);
 		} else {
 		return Promise.reject(err);
@@ -50,12 +48,15 @@ async function fetchApiWithRefresh(url: string, method: string, data?: ApiData, 
 	}
 };
 
-function refreshToken(data: FormFields) {
-	return fetchApi(
+async function refreshToken(data: FormFields) {
+	const response = await fetchApi(
 		`/auth/token`,
 		'POST',
 		data,
 	)
+	localStorage.setItem("refreshToken", response.refreshToken);
+	localStorage.setItem("accessToken", response.accessToken);
+	return response;
 };
 
 const getIngredients = () => {
@@ -150,4 +151,5 @@ export const api = {
 	patchUser,
 	forgotPassword,
 	resetPassword,
+	refreshToken
   };
