@@ -44,6 +44,7 @@
 .date_sum_container {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 40px;
 }
 
 .sum_container {
@@ -51,5 +52,8 @@
     align-items: center;
     gap: 8px;
     margin-left: auto;
-    padding-bottom: 40px;
+}
+
+.loader {
+    height: 50vh;
 }
