@@ -37,4 +37,5 @@
 .link {
 	text-decoration: none;
 	color: currentColor;
+	transform: translate(0, 0);
 }
