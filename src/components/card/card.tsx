@@ -27,11 +27,12 @@ const Card: FC<Props> = ({ ingredient }) => {
 
 	return (
 		<Link
+			ref={dragRef}
 			to={`/ingredients/${ingredientId}`}
 			state={{ background: location }}
 			className={styles.link}
 		>
-			<li ref={dragRef} className={styles.card}>
+			<li className={styles.card}>
 				{selectedIngredients.length ? 
 				<div className={`${styles.card__amount} text text_type_digits-default`}>{selectedIngredients.length}</div> :
 				null}
