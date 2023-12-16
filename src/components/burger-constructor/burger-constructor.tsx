@@ -20,20 +20,22 @@ const BurgerConstructor: FC = () => {
     [ingredients, bun]
   );
 
-  const [{ isOver }, dropRef] = useDrop({
+  const [{ isOver, canDrop }, dropRef] = useDrop({
     accept: 'ingredient',
     drop(item: Ingredient) {
 			dispatch(addIngredient({...item, uuid: v4()}));
     },
     collect: monitor => ({
-      isOver: monitor.isOver()
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
     })
   })
   const isOverStyle = isOver ? {outline: '1px solid #4C4CFF'} : {};
+  const canDropStyle = canDrop ? {backgroundColor: '#222'} : {};
 
 	return (
     <section className={`${styles.constructorSectionContainer} pt-25 pb-8`}>
-      <ul ref={dropRef} className={styles.constructorContainer} style={isOverStyle}>
+      <ul ref={dropRef} className={styles.constructorContainer} style={{...isOverStyle, ...canDropStyle}}>
         <li className={styles.lockItem}>
           {bun &&
           <ConstructorElement
@@ -45,11 +47,11 @@ const BurgerConstructor: FC = () => {
           />}
         </li>
         <li>
-          <ul className={`${styles.constructorScrollContainer} custom-scroll`}>
+          {!!ingredients.length && <ul className={`${styles.constructorScrollContainer} custom-scroll`}>
             {ingredients.map((ingredient, index) =>
 							<DraggableItem key={ingredient.uuid} index={index} ingredient={ingredient}/>
 						)}
-          </ul>
+          </ul>}
         </li>
         <li className={styles.lockItem}>
           {bun &&
@@ -61,6 +63,9 @@ const BurgerConstructor: FC = () => {
             thumbnail={bun.image}
           />}
         </li>
+        {!bun && !ingredients.length &&
+          <p className={`${styles.emptyContainer} text text_type_main-small text_color_inactive`}>В вашей корзине пусто, перетащите в неё ингредиенты.</p>
+        }
       </ul>
       <div className={styles.sumButtonContainer}>
         {sum ?

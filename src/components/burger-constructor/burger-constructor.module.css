@@ -6,7 +6,9 @@
 }
 
 .constructorContainer {
+	border-radius: 50px;
 	width: 600px;
+	min-height: 600px;
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -18,7 +20,7 @@
 .constructorScrollContainer {
 	overflow: overlay;
 	width: 600px;
-	height: calc(100vh - 499px);
+	height: calc(100vh - 489px);
 	padding: 0;
 	list-style: none;
 	display: flex;
@@ -43,4 +45,9 @@
 	display: flex;
 	align-items: center;
 	gap: 8px;
+}
+
+.emptyContainer {
+	margin-top: 40%;
+	text-align: center;
 }
